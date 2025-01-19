@@ -121,7 +121,7 @@
     <button id="share-btn">🔗</button>
     <button id="download-btn">📥</button>
 
-    <h3>Choose Background</h3>
+    <h3 id="bg_label">Choose Background</h3>
     <select id="bg-select">
       <option value="0">Background 1</option>
       <option value="1">Background 2</option>
@@ -252,13 +252,13 @@ document.getElementById('download-btn').addEventListener('click', () => {
   // Display feedback message
     const feedback = document.createElement('p');
     feedback.textContent = 'Download successful!';
-    feedback.style.color = 'green';
-    document.querySelector('.container').insertBefore(feedback, document.getElementById('favorites-list'));
+    feedback.style.color = 'darkgreen';
+    document.querySelector('.container').insertBefore(feedback, document.getElementById('bg_label'));
 
     // Remove feedback message after 3 seconds
     setTimeout(() => {
       feedback.remove();
-    }, 3000);
+    }, 5000);
   
   img.onerror = () => {
     alert('Failed to load the background image. Please try again.');
