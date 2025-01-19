@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Affirmations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-size: cover;
+      background-position: center;
+      transition: background 1s ease;
+    }
+
+    .container {
+  
+      text-align: center;
+      
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #4CAF50;
+    }
+    h3 {text-align: center;
+        color:  #1e07b2;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+  padding: 10px; /* Faint white */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px 0 0 20%;
+ width: 50%;
+ 
+    }
+    h2 {text-align: center;
+        color: #8B0000;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+  padding: 10px; /* Faint white */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px 0 0 20%;
+ width: 50%;
+ 
+    }
+    #affirmation {
+      font-size: 3em;
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-buttons {
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 5px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    select {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 10px;
+      margin: 5px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Affirmations</h1>
+   <b> <div id="affirmation"></div></b>
+    <div class="nav-buttons">
+      <button id="prev-btn">&lt; </button>
+      <button id="next-btn"> &gt;</button>
+    </div>
+    <button id="favorite-btn">❤️</button>
+    <button id="share-btn">🔗</button>
+    <button id="download-btn">📥</button>
+
+    <h3>Choose Background</h3>
+    <select id="bg-select">
+      <option value="0">Background 1</option>
+      <option value="1">Background 2</option>
+      <option value="2">Background 3</option>
+      <option value="3">Background 4</option>
+      <option value="4">Background 5</option>
+    </select>
+
+    <h2>Favorites</h2>
+    <ul id="favorites-list"></ul>
+
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+    const affirmations = [
+      "I am strong.", "I am capable.", "I am worthy of love.", "I am enough.",
+      "I believe in myself.", "I am grateful for today.", "I can do hard things.",
+      "I am a magnet for positivity.", "I choose happiness.", "I am growing every day."
+    ];
+
+    
+    const backgrounds = [
+      "images/background1.jpg",
+      "images/background2.jpg",
+      "images/background3.jpg",
+      "images/background4.jpg",
+      "images/background5.jpg"
+    ];
+
+    let currentAffIndex = 0;
+
+    // Display the current affirmation
+    function displayAffirmation() {
+      document.getElementById('affirmation').innerText = affirmations[currentAffIndex];
+      document.body.style.backgroundImage = `url(${backgrounds[currentAffIndex % backgrounds.length]})`;
+    }
+
+    // Navigate to the previous affirmation
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      currentAffIndex = (currentAffIndex - 1 + affirmations.length) % affirmations.length;
+      displayAffirmation();
+    });
+
+    // Navigate to the next affirmation
+    document.getElementById('next-btn').addEventListener('click', () => {
+      currentAffIndex = (currentAffIndex + 1) % affirmations.length;
+      displayAffirmation();
+    });
+
+    // Save the current affirmation to favorites
+    document.getElementById('favorite-btn').addEventListener('click', () => {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const currentAff = affirmations[currentAffIndex];
+      if (!favorites.includes(currentAff)) {
+        favorites.push(currentAff);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        displayFavorites();
+      }
+    });
+
+    // Display the list of saved favorites
+    function displayFavorites() {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const favoritesList = document.getElementById('favorites-list');
+      favoritesList.innerHTML = '';
+      favorites.forEach(fav => {
+        const li = document.createElement('li');
+        li.textContent = fav;
+        favoritesList.appendChild(li);
+      });
+    }
+
+    // Share the current affirmation
+    document.getElementById('share-btn').addEventListener('click', () => {
+      const currentAff = affirmations[currentAffIndex];
+      if (navigator.share) {
+        navigator.share({
+          title: 'Daily Affirmation',
+          text: currentAff,
+          url: window.location.href
+        }).catch(error => console.error('Error sharing:', error));
+      } else {
+        alert('Sharing is not supported on this device.');
+      }
+    });
+
+    // Change the background image based on user selection
+    document.getElementById('bg-select').addEventListener('change', (event) => {
+      const bgIndex = parseInt(event.target.value, 10);
+      document.body.style.backgroundImage = `url(${backgrounds[bgIndex]})`;
+    });
+
+   // Download the current affirmation with the selected background
+document.getElementById('download-btn').addEventListener('click', () => {
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.crossOrigin = 'anonymous'; // Ensures cross-origin images can be used
+  img.src = backgrounds[currentAffIndex % backgrounds.length];
+
+  img.onload = () => {
+    // Set canvas dimensions to match the image
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Draw the background image
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+
+    // Add the affirmation text
+    ctx.font = '100px Arial';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // White with slight transparency
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)'; // Black outline for better contrast
+    ctx.lineWidth = 4;
+    ctx.textAlign = 'center';
+
+    const textX = img.width / 2;
+    const textY = img.height / 2;
+    ctx.strokeText(affirmations[currentAffIndex], textX, textY);
+    ctx.fillText(affirmations[currentAffIndex], textX, textY);
+
+    // Create a download link
+    const link = document.createElement('a');
+    link.download = 'affirmation.png';
+    link.href = canvas.toDataURL('image/png'); // Convert canvas to PNG
+    link.click();
+  };
+
+  img.onerror = () => {
+    alert('Failed to load the background image. Please try again.');
+  };
+});
+
+    // Initialize the app
+    displayAffirmation();
+    displayFavorites();
+  </script>
+</body>
+</html>
