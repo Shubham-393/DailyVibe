@@ -121,7 +121,7 @@
     <button id="share-btn">🔗</button>
     <button id="download-btn">📥</button>
 
-    <h3 id="bg_label">Choose Background</h3>
+    <h3 id="bg-label">Choose Background</h3>
     <select id="bg-select">
       <option value="0">Background 1</option>
       <option value="1">Background 2</option>
@@ -253,7 +253,7 @@ document.getElementById('download-btn').addEventListener('click', () => {
     const feedback = document.createElement('p');
     feedback.textContent = 'Download successful!';
     feedback.style.color = 'darkgreen';
-    document.querySelector('.container').insertBefore(feedback, document.getElementById('bg_label'));
+    document.querySelector('.container').insertBefore(feedback, document.getElementById('bg-label'));
 
     // Remove feedback message after 3 seconds
     setTimeout(() => {
